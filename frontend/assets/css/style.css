@@ -4,6 +4,10 @@
   margin: 0;
 }
 
+body{
+  background-color: #F7F7F7;
+}
+
 a {
   text-decoration: none;
   color: black;
@@ -20,7 +24,7 @@ img {
 
 .container {
   margin: 5px 0px;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   overflow: hidden;
 }
 
@@ -134,7 +138,7 @@ img {
 }
 
 .left {
-  background-color: rgb(78, 78, 78);
+  background-color: rgb(218, 218, 218);
 }
 
 .left.col{
@@ -152,7 +156,7 @@ img {
 
 .library {
   display: flex;
-  background-color: black;
+  background-color: #000000;
   padding: 15px;
   margin: 10px;
   color: #ffffff;
@@ -210,7 +214,7 @@ img {
   right: 10px;
   height: 40px;
   width: 40px;
-  background-color: #066b29;
+  background-color: #1ABC9C;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -226,7 +230,13 @@ img {
   bottom: 0;
   padding: 15px 5px;
   width: 100%;
-  background-color: #f1f4f2;
+  background-color: rgb(218, 218, 218);
+}
+
+.songDetails{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .songBtns {
@@ -277,13 +287,23 @@ img {
   margin: 5px;
 }
 
+.songBtns i {
+  color: #1ABC9C;
+}
+
 .circle {
   width: 10px;
   height: 10px;
   border-radius: 30px;
-  background-color: #ffffff;
+  background-color: #1ABC9C;
   position: relative;
   bottom: 5px;
-  left: -2px;
+  left: 0%;
   transition: left 0.5s;
+}
+
+.songImg{
+  height : 40px;
+  width: 40px;
+
 }

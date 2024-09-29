@@ -1,19 +1,20 @@
 console.log("HEY We are here")
+let currentAudio = new Audio();
 
-// async function main(){
-//     let a = await fetch("http://3.9.10.132/api/allsong")
-//     console.log(a);
-    
-//     // let response = await a.text()
-//     // console.log(response)
+//function to convert seconds into minutes
+function convertSecondsToMinutes(seconds) {
+    // Round down the seconds to ensure no fractions
+    seconds = Math.floor(seconds);
 
-//     const response = JSON.parse(this.responseText);
-//     const appload = response?.response?.data;
-//     console.log(appload);
-    
-// }
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
 
-// main()
+    // Ensure two digits for both minutes and seconds
+    const formattedMinutes = minutes.toString().padStart(2, '0');
+    const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
+
+    return `${formattedMinutes}:${formattedSeconds}`;
+}
 
 // URL of the API endpoint
 const apiUrl = 'http://3.9.10.132/api/allsong';
@@ -32,34 +33,36 @@ async function fetchData() {
         // Parse the JSON data
         const songData = await response.json();
         playSong(songData);
-        
+
         // Process and log the data
         console.log(songData);  // Corrected this line
-    } catch (error) { 
+    } catch (error) {
         console.error('Error fetching data:', error);
     }
 }
-  
+
 // Call the function to fetch data
-fetchData();  
+fetchData();
 
-let currentAudio = null
-const playMusic = (track) => {
-    // If there is a currently playing audio and it's an Audio object, pause it
-    if (currentAudio instanceof Audio) {
-        currentAudio.pause();
-        currentAudio.currentTime = 0;  // Reset the audio to the beginning
+
+const playMusic = (track, title, artist, pause=false) => {
+
+    currentAudio.src = track;
+    if(!pause){
+        currentAudio.play();
+        play.className = "bi bi-pause-circle-fill";
     }
+    
+    document.querySelector(".songName").innerHTML = title+`<p>${artist}</p>`
+    document.querySelector(".songTime").innerHTML = "00:00 / 00:00"
 
-    // Create a new audio object for the selected track
-    currentAudio = new Audio(track);
-    currentAudio.play();
 };
 
 function playSong(songData) {
     let playList = document.querySelector(".playlist");
     playList.innerHTML = '';  // Clear existing content
-
+    
+    playMusic(songData[0].songlink, songData[0].title, songData[0].artist, true);
     // Loop through the song data and create playlist items
     songData.forEach(song => {
         let listItem = document.createElement('li');
@@ -69,7 +72,7 @@ function playSong(songData) {
         listItem.innerHTML = `
             <div class="library-card-wrap">
                 <div class="song-icon">
-                    <i class="bi bi-music-note"></i>
+                    <img src=${song.img} class="songImg">
                 </div>
                 <div class="song-details">
                     <p>${song.title}</p>
@@ -86,9 +89,38 @@ function playSong(songData) {
 
         // Add click event listener to play the song
         listItem.addEventListener('click', () => {
-            playMusic(song.songlink);  // Play selected song and stop previous one
+            playMusic(song.songlink, song.title, song.artist);  // Play selected song and stop previous one
         });
+
+        //  const play = document.getElementById("play");
+        // console.log(play);
+
+
     });
+
+    // const play = document.getElementById("play");
+
+    play.addEventListener('click', () => {
+        console.log(currentAudio);
+        if (currentAudio.paused) {
+            currentAudio.play()
+            play.className = "bi bi-pause-circle-fill";
+        }
+        else {
+            currentAudio.pause();
+            play.className = "bi bi-play-circle-fill"
+        }
+    });
+
+    currentAudio.addEventListener('timeupdate', ()=>{
+        console.log(currentAudio.currentTime);
+        document.querySelector(".songTime").innerHTML = `${convertSecondsToMinutes(currentAudio.currentTime)} / ${convertSecondsToMinutes(currentAudio.duration)}`
+        
+        document.querySelector(".circle").style.left = (currentAudio.currentTime / currentAudio.duration)*100+"%"
+        
+    })
+
+
 }
 
 
